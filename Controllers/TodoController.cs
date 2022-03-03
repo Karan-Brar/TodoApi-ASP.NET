@@ -27,6 +27,46 @@ namespace TodoApi.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult Create(TodoItem todoItem)
+        {
+            TodoItemService.Add(todoItem);
+            return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
+        }
 
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, TodoItem todoItem)
+        {
+            if(id != todoItem.Id)
+            {
+                return BadRequest();
+            }
+
+            var existingTodoItem = TodoItemService.Get(id);
+            if(existingTodoItem is null)
+            {
+                return NotFound();
+            }
+
+            TodoItemService.Update(todoItem);
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var todoItem = TodoItemService.Get(id);
+
+            if(todoItem is null)
+            {
+                return NotFound();
+            }
+
+            TodoItemService.Delete(id);
+
+            return NoContent();
+        }
     }
 }
