@@ -103,6 +103,7 @@ namespace TodoApi.Controllers
             {
                 existingTodoItem.Description = todoItem.Description;
             }
+            
 
             existingTodoItem.IsComplete = todoItem.IsComplete;
             
