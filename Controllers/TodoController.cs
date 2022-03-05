@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Services;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers
@@ -9,16 +8,31 @@ namespace TodoApi.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
+        private readonly TodoContext _context;
+
+        public TodoController(TodoContext context)
+        {
+            _context = context;
+
+            if (_context.TodoItems.Count() == 0)
+            {
+                _context.TodoItems.Add(new TodoItem { Description = "blah blah" });
+                _context.SaveChanges();
+            }
+        }
+
         [HttpGet]
-        public ActionResult<List<TodoItem>> GetAll() =>
-            TodoItemService.GetAll();
+        public ActionResult<List<TodoItem>> GetAll()
+        {
+            return _context.TodoItems.ToList();
+        }
 
         [HttpGet("{id}")]
         public ActionResult<TodoItem> Get(int id)
         {
-            var todoItem = TodoItemService.Get(id);
+            var todoItem = _context.TodoItems.Find(id);
 
-            if(todoItem == null)
+            if (todoItem == null)
             {
                 return NotFound();
             }
@@ -28,45 +42,46 @@ namespace TodoApi.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(TodoItem todoItem)
-        {
-            TodoItemService.Add(todoItem);
-            return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
-        }
+                public IActionResult Create(TodoItem todoItem)
+                {
+                    _context.TodoItems.Add(todoItem);
+                    _context.SaveChanges();
+                    return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
+                }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, TodoItem todoItem)
-        {
-            if(id != todoItem.Id)
-            {
-                return BadRequest();
-            }
+               /* [HttpPut("{id}")]
+                public IActionResult Update(int id, TodoItem todoItem)
+                {
+                    if(id != todoItem.Id)
+                    {
+                        return BadRequest();
+                    }
 
-            var existingTodoItem = TodoItemService.Get(id);
-            if(existingTodoItem is null)
-            {
-                return NotFound();
-            }
+                    var existingTodoItem = TodoItemService.Get(id);
+                    if(existingTodoItem is null)
+                    {
+                        return NotFound();
+                    }
 
-            TodoItemService.Update(todoItem);
+                    TodoItemService.Update(todoItem);
 
-            return NoContent();
-        }
+                    return NoContent();
+                }
 
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var todoItem = TodoItemService.Get(id);
+                [HttpDelete("{id}")]
+                public IActionResult Delete(int id)
+                {
+                    var todoItem = TodoItemService.Get(id);
 
-            if(todoItem is null)
-            {
-                return NotFound();
-            }
+                    if(todoItem is null)
+                    {
+                        return NotFound();
+                    }
 
-            TodoItemService.Delete(id);
+                    TodoItemService.Delete(id);
 
-            return NoContent();
-        }
+                    return NoContent();
+                }*/
     }
 }
