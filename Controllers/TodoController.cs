@@ -42,46 +42,51 @@ namespace TodoApi.Controllers
 
 
         [HttpPost]
-                public IActionResult Create(TodoItem todoItem)
-                {
-                    _context.TodoItems.Add(todoItem);
-                    _context.SaveChanges();
-                    return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
-                }
+        public IActionResult Create(TodoItem todoItem)
+        {
+            _context.TodoItems.Add(todoItem);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
+        }
 
-               /* [HttpPut("{id}")]
-                public IActionResult Update(int id, TodoItem todoItem)
-                {
-                    if(id != todoItem.Id)
-                    {
-                        return BadRequest();
-                    }
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, TodoItem todoItem)
+        {
+            if (id != todoItem.Id)
+            {
+                return BadRequest();
+            }
 
-                    var existingTodoItem = TodoItemService.Get(id);
-                    if(existingTodoItem is null)
-                    {
-                        return NotFound();
-                    }
+            var existingTodoItem = _context.TodoItems.Find(id);
+            if (existingTodoItem is null)
+            {
+                return NotFound();
+            }
 
-                    TodoItemService.Update(todoItem);
+            existingTodoItem.Description = todoItem.Description;
+            existingTodoItem.IsComplete = todoItem.IsComplete;
 
-                    return NoContent();
-                }
+            _context.SaveChanges();
+
+            return NoContent();
+        }
 
 
-                [HttpDelete("{id}")]
-                public IActionResult Delete(int id)
-                {
-                    var todoItem = TodoItemService.Get(id);
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var todoItem = _context.TodoItems.Find(id);
 
-                    if(todoItem is null)
-                    {
-                        return NotFound();
-                    }
+            if (todoItem is null)
+            {
+                return NotFound();
+            }
 
-                    TodoItemService.Delete(id);
+            _context.TodoItems.Remove(todoItem);
 
-                    return NoContent();
-                }*/
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
