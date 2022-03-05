@@ -42,7 +42,10 @@ namespace TodoApi.Controllers
         /// Responds to GET requests at the route "/Todo/{id}" where {id} is the ID of the To-do item to be retrieved.
         /// </summary>
         /// <param name="id">The ID of the to-do item passed as a parameter in the URL.</param>
-        /// <returns>A specific action result or the to-do item found.</returns>
+        /// <returns>
+        /// A specific action result or the to-do item found.
+        /// Possible action return types - NotFoundActionResult
+        /// </returns>
         [HttpGet("{id}")]
         public ActionResult<TodoItem> Get(int id)
         {
@@ -60,7 +63,10 @@ namespace TodoApi.Controllers
         /// Responds to the POST requests at the route "/Todo".
         /// </summary>
         /// <param name="todoItem">The to-do item data from the request body.</param>
-        /// <returns>A specific action result.</returns>
+        /// <returns>
+        /// A specific action result.
+        /// Possible action return types - CreatedAtActionResult
+        /// </returns>
         [HttpPost]
         public IActionResult Create(TodoItem todoItem)
         {
@@ -73,8 +79,12 @@ namespace TodoApi.Controllers
         /// Responds to PUT requests at the route "/Todo/{id}" where {id} is the ID of the To-do item to be updated.
         /// </summary>
         /// <param name="id">The ID of the to-do item passed as a parameter in the URL.</param>
-        /// <param name="todoItem">The to-do item data from the request body.</param>
+        /// <param name="todoItem">
+        /// The to-do item data from the request body.
+        /// Possible action return types - BadRequestActionResult, NotFoundActionResult, NoContentActionResult
+        /// </param>
         /// <returns>A specific action result.</returns>
+        /// <remarks>The ID passed as a parameter must match the ID of the to-do item passed in request body.</remarks>
         [HttpPut("{id}")]
         public IActionResult Update(int id, TodoItem todoItem)
         {
@@ -106,7 +116,10 @@ namespace TodoApi.Controllers
         /// Responds to DELETE requests at the route "/Todo/{id}" where {id} is the ID of the To-do item to be deleted.
         /// </summary>
         /// <param name="id">The ID of the to-do item passed as a parameter in the URL</param>
-        /// <returns>A specific action result.</returns>
+        /// <returns>
+        /// A specific action result.
+        /// Possible action return types - NotFoundActionResult, NoContentActionResult.
+        /// </returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
