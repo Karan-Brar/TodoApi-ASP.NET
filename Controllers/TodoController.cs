@@ -21,9 +21,9 @@ namespace TodoApi.Controllers
         {
             _context = context;
 
-            if (_context.TodoItems.Count() == 0)
+            if (_context.TodoLists.Count() == 0)
             {
-                _context.TodoItems.Add(new TodoItem { Description = "Buy movie tickets" });
+                _context.TodoLists.Add(new TodoList { AccountId = 1 });
                 _context.SaveChanges();
             }
         }
@@ -33,12 +33,12 @@ namespace TodoApi.Controllers
         /// </summary>
         /// <returns>The List of to-do items in the database.</returns>
         [HttpGet]
-        public ActionResult<List<TodoItem>> GetAll()
+        public ActionResult<List<TodoList>> GetAll()
         {
-            return _context.TodoItems.ToList();
+            return _context.TodoLists.ToList();
         }
 
-        /// <summary>
+/*        /// <summary>
         /// Responds to GET requests at the route "/Todo/{id}" where {id} is the ID of the To-do item to be retrieved.
         /// </summary>
         /// <param name="id">The ID of the to-do item passed as a parameter in the URL.</param>
@@ -72,7 +72,7 @@ namespace TodoApi.Controllers
         {
             _context.TodoItems.Add(todoItem);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(Create), new { id = todoItem.Id }, todoItem);
+            return CreatedAtAction(nameof(Create), new { id = todoItem.ItemId }, todoItem);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, TodoItem todoItem)
         {
-            if (id != todoItem.Id)
+            if (id != todoItem.ItemId)
             {
                 return BadRequest();
             }
@@ -136,6 +136,6 @@ namespace TodoApi.Controllers
             _context.SaveChanges();
 
             return NoContent();
-        }
+        }*/
     }
 }
